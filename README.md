@@ -17,6 +17,10 @@ And then you can open the file:
 
 # Features
 
+* the program can check if the number is correct.
+
+![image](https://github.com/22-luis/GuessTheNumber/assets/62577396/a4031da9-2b6c-48af-9655-5ac59fca6971)
+
 
 * The program give you hints, if the number is higher or lower and if the answer is correct.
 
