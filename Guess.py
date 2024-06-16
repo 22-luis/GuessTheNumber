@@ -1,90 +1,69 @@
 import random
-import pygame
-from pygame_textinput import TextInput
+import tkinter as tk
 
-pygame.init()
+from tkinter.messagebox import showinfo
 
-run = True
-guess = False
 answer = random.randint(1,100)
+guess = False
 
-#Colors
-background = (173, 216, 230)
-input = (255, 255, 255) # Blanco
-button = (65, 105, 225)
-text_C = (0, 0, 0)
-right = (46, 204, 113)
-wrong = (231, 76, 60)
-
-def circle(surface, color, center, radius):
-    pygame.draw.circle(surface, color, center, radius)
-
-# Function to create the rounded button
-def rounded_rect(surface, color, rect, radius):
-    x, y, width, height = rect
-    circle(surface, color, (x + radius, y + radius), radius)
-    circle(surface, color, (x + width - radius - 1, y + radius), radius)
-    circle(surface, color, (x + radius, y + height - radius - 1), radius)
-    circle(surface, color, (x + width - radius - 1, y + height - radius - 1), radius)
-    pygame.draw.rect(surface, color, (x + radius, y, width - 2 * radius, height))
-    pygame.draw.rect(surface, color, (x, y + radius, width, height - 2 * radius))
-
-screen_width = 500
-screen_height = 500
-screen = pygame.display.set_mode([screen_width,screen_height])
-pygame.display.set_caption("Guess The Number")
-
-#create the title
-title = pygame.font.Font(None, 48)
-title_text = title.render("Guess The Number", True, text_C)
-title_rect = title_text.get_rect(center=(screen_width//2, 50))
-
-number = TextInput("Arial", 24, text_C, text_C, 3)
-
-while run:
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        number.update(event)
-            
-    screen.fill(background)
-    
-    screen.blit(title_text,title_rect)
-    
-    #Create the answer box
-    number_rect = pygame.Rect(100, 100, 100, 50)
-    rounded_rect(screen, button, number_rect, 15)
-    number.set_rect(number_rect)
-    
-    numberGuess = number.get_text() 
-    
-    #Create check button
-    btn = pygame.Rect(100, 100, 100, 50)
-    rounded_rect(screen, button, btn, 15)
-    font = pygame.font.Font(None, 24)
-    text = font.render("Check", True, text_C)
-    screen.blit(text, (122,117))
-    
-    pygame.display.flip()
-
-""" 
+# function to get a new number
+def new():
+    global answer, guess
+    answer = random.randint(1,100)
+    guess = False
 
 
 def hint(number):
     global guess
-    if(number < answer): print("Higher")
-    elif(number > answer): print("Lower")
+    if(number < answer): showinfo(title='Hint', message = "Higher")
+    elif(number > answer): showinfo(title='Hint', message = "Lower")
     elif(number == answer): 
-        print(f"That's correct the number is {number}")
+        showinfo(title='Answer', message = f"That's correct the number is {number}")
         guess = True
-    
+        
+# Check if the number is the correct
+def check():
+    global guess
+    if not guess:
+        try:
+            number = int(input.get())
+            hint(number)
+        except ValueError:
+            showinfo(title='Invalid value', message = "Integers Only")
+
+root = tk.Tk()
+root.title('Guess The Number')
+root.configure(bg="#AED6F1")
+
+width = 400
+height = 400
+
+# get the screen dimension
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+# find the center point
+center_x = int(screen_width/2 - width / 2)
+center_y = int(screen_height/2 - height / 2)
+
+root.geometry(f'{width}x{height}+{center_x}+{center_y}')
+root.resizable(False, False)
+
+# input 
+number = tk.IntVar()
+input = tk.Entry(root, font=("Arial", 24))
+input.pack(ipadx=4, ipady=20, expand=True )
+
+# check answer button
+check = tk.Button(root, text="Check", command=check, bg="#2E86C1", fg="white")
+check.pack(ipadx=55, ipady=25, expand=True, side=tk.LEFT, pady = 35)
+
+# New number
+new_n = tk.Button(root, text="Get a new number", command=new, bg="#2E86C1", fg="white")
+new_n.pack(ipadx=25, ipady=25, expand=True, side=tk.RIGHT, pady = 35)
 
 
-while not guess:
-    number = int(input("Type your number: "))
-    hint(number)
- """
+root.mainloop()
 
 
     
