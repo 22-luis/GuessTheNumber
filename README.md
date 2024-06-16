@@ -9,7 +9,7 @@ Clone the repository:
 git clone https://github.com/22-luis/GuessTheNumber.git
 ```
 
-Open the folder named:
+Open the folder :
 📁 dist
 
 And then you can open the file:
